@@ -1,12 +1,17 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class GameBoard extends Application {
@@ -68,8 +73,24 @@ public class GameBoard extends Application {
             label.setAlignment(Pos.CENTER_RIGHT);
             hBox.getChildren().addAll(label,textField);
         }
+        Button check = new Button("Check");
+        check.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Checking...");
+                CheckWords.urlMaker();
+                try {
+                    CheckWords.checkIfExist(textFields);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        pane.getChildren().add(check);
         pane.getChildren().add(hBox);
         borderPane.setCenter(hBox);
+        borderPane.setBottom(check);
+        CheckWords.checkWhichFile(labels);
         Scene scene = new Scene(borderPane,800,800);
         primaryStage.setScene(scene);
         primaryStage.show();
