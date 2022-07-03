@@ -1,3 +1,4 @@
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -68,9 +69,14 @@ public class CheckWords {
             Scanner reader = new Scanner(input);
             while (reader.hasNextLine()) {
                 String word = reader.nextLine();
-                if (word.equals(answer)) {
+                if (word.equals(answer) && answer.charAt(0) == GamePage.WordToPlay) {
                     fortinyteEilaBabeji[i] = true;
                     System.out.print(word + ":::");
+                    break;
+                }
+                else if (answer.charAt(0) != GamePage.WordToPlay){
+                    Alert alert = new Alert(Alert.AlertType.WARNING,fileName[i] + " با حرف نامناسب شروع شده است!");
+                    alert.show();
                     break;
                 }
                 System.out.println(word + "+++");
@@ -80,6 +86,8 @@ public class CheckWords {
     }
 
     public static void main(String[] args) {
-        checkWhichFile(GameBoard.labels);
+        String st = "سلام";
+        System.out.println(st.charAt(0));
+        char c = 'a';
     }
 }

@@ -13,6 +13,7 @@ public class GamePage extends Application {
     public static int numberOfItems;
     static ArrayList<ToggleButton> buttons = new ArrayList<ToggleButton>();
     static int[] chosenOne = new int[11];
+    static char WordToPlay;
     
     public GamePage() throws Exception {
         start(new Stage());
@@ -46,6 +47,7 @@ public class GamePage extends Application {
                 }
                 else {
                     try {
+                        WordToPlay = textField.getCharacters().charAt(0);
                         new GameBoard();
                     } catch (Exception e) {
                         e.printStackTrace();
