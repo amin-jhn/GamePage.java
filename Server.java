@@ -1,9 +1,12 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
+    static ArrayList <Client> clients = new ArrayList<>();
+    static ArrayList <String> words = new ArrayList<>();
 
     public Server(ServerSocket socket){
         serverSocket = socket;
@@ -33,6 +36,7 @@ public class Server {
             e.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(9999);

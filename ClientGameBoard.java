@@ -15,14 +15,14 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class GameBoard extends Application {
+public class ClientGameBoard extends Application {
 
-    static ArrayList <Label> labels = new ArrayList<>();
+    static ArrayList<Label> labels = new ArrayList<>();
     static ArrayList <TextField> textFields = new ArrayList<>();
     static int score;
     static int total;
 
-    public GameBoard() throws Exception {
+    public ClientGameBoard() throws Exception {
         start(new Stage());
     }
 
@@ -70,8 +70,8 @@ public class GameBoard extends Application {
                     label.setText("اشیا");
                     break;
             }
-            labels.add(label);
-            textFields.add(textField);
+            ClientGameBoard.labels.add(label);
+            ClientGameBoard.textFields.add(textField);
             textField.setEditable(true);
             label.setAlignment(Pos.CENTER_RIGHT);
             hBox.getChildren().addAll(label,textField);
@@ -83,38 +83,16 @@ public class GameBoard extends Application {
                 score = 0;
                 Main.whoseTurn = !Main.whoseTurn;
                 System.out.println("Checking...");
-                CheckWords.urlMaker();
+                CheckWordClient.urlMaker();
                 try {
-                    CheckWords.checkIfExist(textFields);
+                    CheckWordClient.checkIfExist(GameBoard.textFields);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                if (CheckWords.anyError) {
+                if (CheckWordClient.anyError) {
                     total += score;
-                    GamePage.roundsPassed++;
-                    if (GamePage.roundsPassed==GamePage.round) {
-                        try {
-                            System.out.println(Main.HostName);
-                            BorderPane borderPane = new BorderPane();
-                            Pane pane = new Pane();
-
-                            String first = "Winner is " + Main.HostName + " with score: " + GameBoard.total;
-
-                            Label label = new Label();
-
-                            label.setText(first);
-
-                            pane.getChildren().add(label);
-                            borderPane.setCenter(label);
-                            Scene scene = new Scene(borderPane,800,800);
-                            primaryStage.setScene(scene);
-                            primaryStage.show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println(score + ":::" + total);
-                    }
-                    else if (Main.whoseTurn) {
+                    System.out.println(score + ":::" + total);
+                    if (!Main.whoseTurn) {
                         try {
 //                            if (Main.roundsPlayed == GamePage.round)
 //                                new FinalResult();
@@ -126,7 +104,7 @@ public class GameBoard extends Application {
                     }
                     else {
                         try {
-                            ClientGameBoard.ClientrefreshCaller();
+                            GameBoard.HostRefreshCaller();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -139,13 +117,13 @@ public class GameBoard extends Application {
         pane.getChildren().add(hBox);
         borderPane.setCenter(hBox);
         borderPane.setBottom(check);
-        CheckWords.checkWhichFile(labels);
+        CheckWordClient.checkWhichFile(GameBoard.labels);
         Scene scene = new Scene(borderPane,800,800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public static void HostRefreshCaller() throws Exception {
+    public static void ClientrefreshCaller() throws Exception {
         getScore();
         new Refresh();
     }
@@ -153,5 +131,39 @@ public class GameBoard extends Application {
     public static void getScore(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "your score is" + score);
         alert.show();
+    }
+
+    public static void checkScore(){
+        score = 0;
+        Main.whoseTurn = !Main.whoseTurn;
+        System.out.println("Checking...");
+        CheckWordClient.urlMaker();
+        try {
+            CheckWordClient.checkIfExist(GameBoard.textFields);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (CheckWordClient.anyError) {
+            total += score;
+            System.out.println(score + ":::" + total);
+            if (!Main.whoseTurn) {
+                try {
+//                            if (Main.roundsPlayed == GamePage.round)
+//                                new FinalResult();
+//                            else new Refresh();
+                    new Refresh();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    GameBoard.HostRefreshCaller();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            getScore();
+        }
     }
 }

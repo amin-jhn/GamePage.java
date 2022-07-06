@@ -14,6 +14,8 @@ public class GamePage extends Application {
     static ArrayList<ToggleButton> buttons = new ArrayList<ToggleButton>();
     static int[] chosenOne = new int[11];
     static char WordToPlay;
+    static int round;
+    static int roundsPassed;
     
     public GamePage() throws Exception {
         start(new Stage());
@@ -21,12 +23,16 @@ public class GamePage extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        roundsPassed=0;
         BorderPane bPane = new BorderPane();
         Pane pane = new Pane();
-        HBox hBox = new HBox();
+        VBox hBox = new VBox();
         Label label = new Label("حرف مورد نظر را برای شروع بازی وارد کنید");
+        Label label2 = new Label("تعداد دور های مد نظر را برای شروع بازی وارد کنید");
         TextField textField = new TextField();
+        TextField rounds = new TextField();
         hBox.getChildren().addAll(label, textField);
+        hBox.getChildren().addAll(label2, rounds);
         pane.getChildren().add(hBox);
         bPane.setTop(hBox);
         TilePane tilePane = new TilePane();
@@ -45,9 +51,18 @@ public class GamePage extends Application {
                     Alert alert = new Alert(Alert.AlertType.WARNING,"حداقل 5 مورد را انتخاب کنید");
                     alert.show();
                 }
+                else if (rounds.getCharacters().length() != 1
+                        || rounds.getCharacters().charAt(0) > 57
+                            || rounds.getCharacters().charAt(0) < 49){
+                                Alert alert = new Alert(Alert.AlertType.WARNING, "لطفا عددی مناسب وارد کنید");
+                                alert.show();
+                }
                 else {
                     try {
+                        round = Integer.parseInt(String.valueOf(rounds.getCharacters().charAt(0)));
                         WordToPlay = textField.getCharacters().charAt(0);
+                        Main.wordsUsed[Main.roundsPlayed] = WordToPlay;
+                        Main.roundsPlayed++;
                         new GameBoard();
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -8,16 +8,14 @@ public class ClientHandler implements Runnable{
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String clientUserName;
+    private String clientUserName = "amin";
 
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUserName = bufferedReader.readLine();
             clientHandlers.add(this);
-            broadcastMessage("Hola " + clientUserName);
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -29,7 +27,6 @@ public class ClientHandler implements Runnable{
         while (socket.isConnected()) {
             try {
                 message = bufferedReader.readLine();
-                broadcastMessage(message);
             } catch (IOException e) {
                 closeEverything(socket,bufferedReader, bufferedWriter);
                 break;
@@ -52,7 +49,6 @@ public class ClientHandler implements Runnable{
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("Bye");
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){

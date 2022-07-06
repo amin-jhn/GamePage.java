@@ -8,21 +8,19 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class CheckWords {
+public class CheckWordClient {
     static String[] fileName = new String[11];
     static String[] addresses = new String[11];
     static boolean[] isTrue = new boolean[11];
     static boolean anyError;
-    static ArrayList <String> answers = new ArrayList<>();
+    static String[] answers = new String[11];
 
     public static void checkWhichFile(ArrayList <Label> labels){
         for (int i = 0; i < labels.size() ; i++) {
             fileName[i] = labels.get(i).getText();
             System.out.println(fileName[i]);
-            System.out.println(i);
         }
     }
-
 
     public static void urlMaker(){
         for (int i = 0; i < GameBoard.labels.size(); i++) {
@@ -78,24 +76,24 @@ public class CheckWords {
                 String word = reader.nextLine();
                 if (word.equals(answer) && answer.charAt(0) == GamePage.WordToPlay) {
                     isTrue[i] = true;
-                    for (int j = 0; j < answers.size(); j++) {
-                        if (answers.get(i).equals(answer)) {
-                            GameBoard.score += 5;
+                    for (int j = 0; j < CheckWords.answers.size(); j++) {
+                        if (CheckWords.answers.get(i).equals(answer)) {
+                            ClientGameBoard.score += 5;
                             break;
                         }
-                        else if (j == answers.size()-1) {
-                            GameBoard.score += 10;
-                            answers.add(answer);
+                        else if (j == CheckWords.answers.size()-1) {
+                            ClientGameBoard.score += 10;
+                            CheckWords.answers.add(answer);
                             break;
                         }
                     }
 
                 }
                 else if (Objects.equals(textFields.get(i).getText(), "")) break;
-                else if (answer.charAt(0) != GamePage.WordToPlay){
-                    anyError = false;
+                else if (answers[i].charAt(0) != GamePage.WordToPlay){
                     Alert alert = new Alert(Alert.AlertType.ERROR,fileName[i] + " با حرف نامناسب شروع شده است!");
                     alert.show();
+                    anyError = false;
                     break;
                 }
                 //System.out.println(word + "+++");

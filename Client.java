@@ -7,6 +7,7 @@ public class Client {
     private BufferedWriter bufferedWriter;
     private BufferedReader bufferedReader;
     private String userName;
+    static String[] answers = new String[11];
 
     public Client(Socket socket, String userName){
         try {
